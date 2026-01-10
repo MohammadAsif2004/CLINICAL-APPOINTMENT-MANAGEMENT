@@ -1,96 +1,51 @@
-<html>
-    <head>
-        <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-        }
+{% extends 'accounts/base.html' %}
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #283593;
-            color: white;
-            padding: 15px 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+{% block title %}Healthcare Providers - Clinic Appointment{% endblock %}
 
-        .header .app-name {
-            font-size: 22px;
-            font-weight: bold;
-        }
+{% block content %}
+{% include "accounts/admin_header.html" %}
 
-        .header a {
-            color: #ffeb3b;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .container {
-            padding: 25px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .menu-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            width: 300px;
-            display: inline-block;
-            margin-right: 20px;
-            margin-bottom: 20px;
-        }
-
-        .menu-card a {
-            text-decoration: none;
-            color: #283593;
-            font-weight: bold;
-        }
-    </style>
-    </head>
-<body style="margin: 0;padding:0;">
-    <div class="header">
-        <div class="app-name">🏥 Clinic Appointment System - Admin</div>
-
+<div class="container">
+    <div class="mb-3 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
         <div>
-            <a href="/admin-dashboard/">Admin Home</a> |
-            <a href="/admin/" target="_blank">Django Admin Panel</a> |
-            <a href="{% url 'logout' %}">Logout</a>
+            <h1>Healthcare Providers</h1>
+            <p class="text-muted">Manage all provider accounts.</p>
         </div>
+        <a href="{% url 'provider_add' %}" class="btn btn-primary">+ Add New Provider</a>
     </div>
-    <div style="margin: 20px;">
-<h2>Healthcare Providers</h2>
 
-<button><a href="{% url 'provider_add' %}">Add New Provider</a></button><br><br>
-
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Username</th>
-        <th>Name</th>
-        <th>Designation</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-
-    {% for p in providers %}
-    <tr>
-        <td>{{ p.username }}</td>
-        <td>{{ p.first_name }} {{ p.last_name }}</td>
-        <td>{{ p.designation }}</td>
-        <td><a href="{% url 'provider_update' p.id %}">Update</a></td>
-        <td><a href="{% url 'provider_delete' p.id %}">Delete</a></td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class="card table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in providers %}
+                <tr>
+                    <td>{{ p.username }}</td>
+                    <td>
+                        <strong>{{ p.first_name }} {{ p.last_name }}</strong>
+                    </td>
+                    <td>{{ p.designation }}</td>
+                    <td>
+                        <a href="{% url 'provider_update' p.id %}" class="btn btn-secondary"
+                            style="padding: 5px 10px; font-size: 0.8rem;">Edit</a>
+                        <a href="{% url 'provider_delete' p.id %}" class="btn btn-danger"
+                            style="padding: 5px 10px; font-size: 0.8rem; margin-left: 5px;">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No providers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-</body>
-</html>
+{% endblock %}

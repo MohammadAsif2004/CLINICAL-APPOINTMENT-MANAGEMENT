@@ -1,19 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head><title>Provider Dashboard</title></head>
-<body style="margin:0;padding:0;">
+{% extends 'accounts/base.html' %}
 
+{% block title %}Provider Dashboard - Clinic Appointment{% endblock %}
+
+{% block content %}
 {% include "accounts/provider_header.html" %}
 
-<div style="padding:25px; font-family:Arial;">
+<div class="container">
+    <div class="mb-3" style="margin-top: 1rem;">
+        <h1>Welcome, <strong style="color: var(--primary-color);">{{ request.user }}</strong></h1>
+        <p class="text-muted">Manage your practice and patient appointments.</p>
+    </div>
 
-<!-- <h1>Provider Dashboard</h1> -->
-<p>Welcome, {{ request.user }}</p>
+    <div class="dashboard-grid">
+        <!-- Appointments Card -->
+        <a href="{% url 'provider_appointments' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📋</div>
+            <h3 style="margin-bottom: 0.5rem;">Appointments</h3>
+            <p class="text-muted mb-2">View and manage today's and upcoming appointments.</p>
+            <div class="btn btn-primary btn-block">View Appointments</div>
+        </a>
 
-<p>Use the menu to manage your appointments.</p>
+        <!-- Calendar Card -->
+        <a href="{% url 'provider_calendar' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📅</div>
+            <h3 style="margin-bottom: 0.5rem;">Calendar</h3>
+            <p class="text-muted mb-2">Check availability and schedule.</p>
+            <div class="btn btn-secondary btn-block">View Calendar</div>
+        </a>
 
+        <!-- Profile Card -->
+        <a href="{% url 'provider_profile' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+            <h3 style="margin-bottom: 0.5rem;">My Profile</h3>
+            <p class="text-muted mb-2">Update your provider details and availability.</p>
+            <div class="btn btn-secondary btn-block">Edit Profile</div>
+        </a>
+    </div>
 </div>
-
-</body>
-</html>
-
+{% endblock %}

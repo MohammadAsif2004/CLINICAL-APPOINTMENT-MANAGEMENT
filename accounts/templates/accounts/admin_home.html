@@ -1,95 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-        }
+{% extends 'accounts/base.html' %}
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #283593;
-            color: white;
-            padding: 15px 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+{% block title %}Admin Dashboard - Clinic Appointment{% endblock %}
 
-        .header .app-name {
-            font-size: 22px;
-            font-weight: bold;
-        }
+{% block content %}
+{% include "accounts/admin_header.html" %}
 
-        .header a {
-            color: #ffeb3b;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .container {
-            padding: 25px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .menu-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            width: 300px;
-            display: inline-block;
-            margin-right: 20px;
-            margin-bottom: 20px;
-        }
-
-        .menu-card a {
-            text-decoration: none;
-            color: #283593;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- HEADER -->
-    <div class="header">
-    <div class="app-name">🏥 Clinic Appointment System - Admin</div>
-
-    <div>
-        <a href="{% url 'admin_profile' %}">Profile</a> |
-        <a href="/admin/" target="_blank">Django Admin Panel</a> |
-        <a href="{% url 'logout' %}">Logout</a>
-    </div>
+<div class="container">
+    <div class="mb-3" style="margin-top: 1rem;">
+        <h1>Welcome, <strong style="color: var(--primary-color);">{{ request.user }}</strong></h1>
+        <p class="text-muted">System Administration Panel</p>
     </div>
 
-    <div style="margin-left: 25px;margin-top: 25px;">
-       <h1> Welcome, <strong>{{ request.user }}</strong></h1>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div class="container">
-
-        <div class="section-title">Admin Tools</div>
-
+    <div class="dashboard-grid">
         <!-- Provider Management Card -->
-        <div class="menu-card">
-            <h3>Healthcare Providers</h3>
-            <p>Manage provider accounts, update roles, and set designations.</p>
-            <a href="{% url 'provider_list' %}">Go to Provider Management →</a>
-        </div>
+        <a href="{% url 'provider_list' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍⚕️</div>
+            <h3 style="margin-bottom: 0.5rem;">Healthcare Providers</h3>
+            <p class="text-muted mb-2">Manage provider accounts, update roles, and set designations.</p>
+            <div class="btn btn-primary btn-block">Manage Providers</div>
+        </a>
 
+        <!-- Could add more admin cards here -->
+        <a href="/admin/" target="_blank" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔧</div>
+            <h3 style="margin-bottom: 0.5rem;">Django Admin</h3>
+            <p class="text-muted mb-2">Access the raw database admin interface.</p>
+            <div class="btn btn-secondary btn-block">Open Panel</div>
+        </a>
     </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,27 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Book Appointment</title>
+{% extends 'accounts/base.html' %}
+
+{% block title %}Book Appointment - Clinic Appointment{% endblock %}
+
+{% block content %}
+{% include "accounts/patient_header.html" %}
+
+<div class="container">
+    <div class="auth-card" style="max-width: 600px; margin: 2rem auto;">
+        <div class="mb-3">
+            <h2>📅 Book Appointment</h2>
+            <p class="text-muted">Fill in the details to schedule your visit.</p>
+        </div>
+
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-error">{{ msg }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label">Select Provider</label>
+                <select name="provider" class="form-control" required>
+                    <option value="" disabled selected>Choose a doctor...</option>
+                    {% for p in providers %}
+                    <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }} ({{ p.designation }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">Start Time</label>
+                    <input type="time" id="start_time" name="start_time" class="form-control" required
+                        onchange="validateTime();">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">End Time</label>
+                    <input type="time" id="end_time" name="end_time" class="form-control" required
+                        onchange="validateTime();">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Reason for Visit</label>
+                <textarea name="reason" class="form-control" rows="3"
+                    placeholder="Briefly describe your symptoms or reason for visit..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Confirm Booking</button>
+        </form>
+    </div>
+</div>
 
 <script>
     function setMinDate() {
         let today = new Date().toISOString().split("T")[0];
-        document.getElementsByName("date")[0].setAttribute("min", today);
-    }
-
-    function adjustTimeRestrictions() {
-        let dateInput = document.getElementsByName("date")[0].value;
-        let startInput = document.getElementById("start_time");
-        let endInput = document.getElementById("end_time");
-
-        let now = new Date();
-        let currentTime = now.toISOString().substring(11, 16); // local HH:MM
-
-        if (dateInput === new Date().toISOString().split("T")[0]) {
-            // If booking today → enforce min time = now
-            startInput.min = currentTime;
-        } else {
-            startInput.min = "00:00"; // no restrictions
+        let dateInput = document.getElementsByName("date")[0];
+        if (dateInput) {
+            dateInput.setAttribute("min", today);
         }
     }
 
@@ -35,79 +79,24 @@
         }
     }
 
-    window.onload = function () {
-        setMinDate();
-        adjustTimeRestrictions();
-    };
-</script>
-
-</head>
-<body style="margin:0;padding:0;">
-
-{% include "accounts/patient_header.html" %}
-
-<div style="padding:25px; font-family:Arial;">
-
-<h2>Book Appointment</h2>
-
-{% for msg in messages %}
-<p style="color:red;">{{ msg }}</p>
-{% endfor %}
-
-<form method="post">
-    {% csrf_token %}
-
-    Provider:<br>
-    <select name="provider" required>
-        {% for p in providers %}
-        <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }} ({{ p.designation }})</option>
-        {% endfor %}
-    </select><br><br>
-
-    Date:<br>
-<input type="date" name="date" required min="{{ today }}">
-<br><br>
-
-
-
-Start Time:<br>
-<input type="time" id="start_time" name="start_time" required onchange="validateTime();"><br><br>
-
-End Time:<br>
-<input type="time" id="end_time" name="end_time" required onchange="validateTime();"><br><br>
-
-
-    Reason:<br>
-    <textarea name="reason" required></textarea><br><br>
-
-    <button type="submit">Submit</button>
-
-</form>
-
-</div>
-<script>
     document.addEventListener("DOMContentLoaded", function () {
-
-        // Keep date >= today
-        let dateInput = document.querySelector("input[name='date']");
-        let today = new Date().toISOString().split("T")[0];
-        dateInput.setAttribute("min", today);
-
+        setMinDate();
     });
 </script>
+
 {% if popup %}
 <script>
-    alert("{{ popup }}");
+    // Delay slightly to ensure DOM is ready and user sees the page
+    setTimeout(() => alert("{{ popup }}"), 100);
 </script>
 {% endif %}
 
 {% if success_popup %}
 <script>
-    alert("{{ success_popup }}");
-    window.location.href = "{% url 'appointment_list' %}";
+    setTimeout(() => {
+        alert("{{ success_popup }}");
+        window.location.href = "{% url 'appointment_list' %}";
+    }, 100);
 </script>
 {% endif %}
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,43 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Appointments</title>
-</head>
-<body style="margin: 0;padding:0;">
+{% extends 'accounts/base.html' %}
 
+{% block title %}My Appointments - Clinic Appointment{% endblock %}
+
+{% block content %}
 {% include "accounts/patient_header.html" %}
 
-<div style="padding:25px; font-family:Arial;">
+<div class="container">
+    <div class="mb-3 mt-3">
+        <h1>My Appointments</h1>
+        <p class="text-muted">History of all your appointments</p>
+    </div>
 
-<h2>My Appointments</h2>
-
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Provider</th>
-        <th>Designation</th>
-        <th>Date</th>
-        <th>Time Range</th>
-        <th>Reason</th>
-        <th>Status</th>
-        <th>Reschedule</th>
-        <th>Delete</th>
-    </tr>
-
-    {% for a in appointments %}
-    <tr>
-        <td>{{ a.provider.first_name }} {{ a.provider.last_name }}</td>
-        <td>{{ a.provider.designation }}</td>
-        <td>{{ a.date }}</td>
-        <td>{{ a.start_time }} → {{ a.end_time }}</td>
-        <td>{{ a.reason }}</td>
-        <td>{{ a.status }}</td>
-        <td><a href="{% url 'appointment_reschedule' a.id %}">Reschedule</a></td>
-        <td><a href="{% url 'appointment_delete' a.id %}">Delete</a></td>
-    </tr>
-    {% endfor %}
-</table>
+    <div class="card table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Provider</th>
+                    <th>Designation</th>
+                    <th>Date</th>
+                    <th>Time Range</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td>
+                        <strong>{{ a.provider.first_name }} {{ a.provider.last_name }}</strong>
+                    </td>
+                    <td>{{ a.provider.designation }}</td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.start_time }} - {{ a.end_time }}</td>
+                    <td>{{ a.reason }}</td>
+                    <td>
+                        <span class="badge badge-{{ a.status|lower }}">{{ a.status }}</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'appointment_reschedule' a.id %}" class="btn btn-secondary"
+                            style="padding: 5px 10px; font-size: 0.8rem;">Reschedule</a>
+                        <a href="{% url 'appointment_delete' a.id %}" class="btn btn-danger"
+                            style="padding: 5px 10px; font-size: 0.8rem; margin-left: 5px;">Cancel</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">You have no upcoming appointments.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </div>
-
-</body>
-</html>
+{% endblock %}

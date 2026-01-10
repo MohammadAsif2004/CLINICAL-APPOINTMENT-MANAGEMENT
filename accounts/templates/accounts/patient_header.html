@@ -1,22 +1,13 @@
-<div style="
-    background:#283593;
-    padding:15px;
-    color:white;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-family:Arial;">
-    
-    <div style="font-size:20px; font-weight:bold;">
-        🏥 Patient Dashboard
-    </div>
+<nav class="navbar">
+    <a href="/patient-dashboard/" class="navbar-brand">
+        <span>🏥</span> Patient Dashboard
+    </a>
 
-    <div>
-        <a href="/patient-dashboard/" style="color:#ffeb3b; margin-right:15px;">Home</a>
-        <a href="{% url 'appointment_add' %}" style="color:#ffeb3b; margin-right:15px;">Book Appointment</a>
-        <a href="{% url 'appointment_list' %}" style="color:#ffeb3b; margin-right:15px;">My Appointments</a>
-        <a href="{% url 'patient_profile' %}" style="color:#ffeb3b; margin-right:15px;">My Profile</a>
-        <a href="{% url 'logout' %}" style="color:#ffeb3b;">Logout</a>
+    <div class="nav-links">
+        <a href="/patient-dashboard/" class="nav-link">Home</a>
+        <a href="{% url 'appointment_add' %}" class="nav-link">Book Appointment</a>
+        <a href="{% url 'appointment_list' %}" class="nav-link">My Appointments</a>
+        <a href="{% url 'patient_profile' %}" class="nav-link">My Profile</a>
+        <a href="{% url 'logout' %}" class="nav-btn">Logout</a>
     </div>
-
-</div>
+</nav>

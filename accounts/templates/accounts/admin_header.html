@@ -1,20 +1,12 @@
-<div style="
-    background:#283593;
-    padding:15px;
-    color:white;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-family:Arial;
-">
-    <div style="font-size:20px; font-weight:bold;">
-        🏥 Admin Dashboard
-    </div>
+<nav class="navbar" style="background: #1e1b4b;">
+    <a href="/admin-dashboard/" class="navbar-brand">
+        <span>🏥</span> Admin Dashboard
+    </a>
 
-    <div>
-        <a href="/admin-dashboard/" style="color:#ffeb3b; margin-right:15px;">Home</a>
-        <a href="{% url 'admin_profile' %}" style="color:#ffeb3b; margin-right:15px;">Profile</a>
-        <a href="/admin/" style="color:#ffeb3b; margin-right:15px;" target="_blank">Django Admin</a>
-        <a href="{% url 'logout' %}" style="color:#ffeb3b;">Logout</a>
+    <div class="nav-links">
+        <a href="/admin-dashboard/" class="nav-link">Home</a>
+        <a href="{% url 'admin_profile' %}" class="nav-link">Profile</a>
+        <a href="/admin/" class="nav-link" target="_blank">Django Admin</a>
+        <a href="{% url 'logout' %}" class="nav-btn">Logout</a>
     </div>
-</div>
+</nav>

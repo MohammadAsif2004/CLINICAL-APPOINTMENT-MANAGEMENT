@@ -1,43 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Patient Dashboard</title>
-    <style>
-        body { margin:0; padding:0; font-family:Arial; background:#f5f5f5; }
-        .header {
-            background:#283593; padding:15px; color:white;
-            display:flex; justify-content:space-between;
-        }
-        a { color:blue; text-decoration:none; margin-left:15px; }
-        .container { padding:30px; }
-        .card {
-            background:white; padding:20px;
-            border-radius:10px; width:300px;
-            margin-bottom:20px;
-            box-shadow:0 2px 5px rgba(0,0,0,0.2);
-        }
-    </style>
-</head>
-<body>
+{% extends 'accounts/base.html' %}
 
+{% block title %}Patient Dashboard - Clinic Appointment{% endblock %}
+
+{% block content %}
 {% include "accounts/patient_header.html" %}
-<div style="margin-top: 25px;margin-left: 25px;">
-        <h1>Welcome, <strong>{{ request.user }}</strong></h1>
-    </div>
 
 <div class="container">
-
-    <div class="card">
-        <h3>Book Appointment</h3>
-        <a href="{% url 'appointment_add' %}">Book Now →</a>
+    <div class="mb-3" style="margin-top: 1rem;">
+        <h1>Welcome, <strong style="color: var(--primary-color);">{{ request.user }}</strong></h1>
+        <p class="text-muted">Manage your appointments and health records.</p>
     </div>
 
-    <div class="card">
-        <h3>My Appointments</h3>
-        <a href="{% url 'appointment_list' %}">View →</a>
-    </div>
+    <div class="dashboard-grid">
+        <!-- Book Appointment Card -->
+        <a href="{% url 'appointment_add' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📅</div>
+            <h3 style="margin-bottom: 0.5rem;">Book Appointment</h3>
+            <p class="text-muted mb-2">Schedule a new visit with a doctor.</p>
+            <div class="btn btn-primary btn-block">Book Now</div>
+        </a>
 
+        <!-- My Appointments Card -->
+        <a href="{% url 'appointment_list' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📂</div>
+            <h3 style="margin-bottom: 0.5rem;">My Appointments</h3>
+            <p class="text-muted mb-2">View upcoming and past appointments.</p>
+            <div class="btn btn-secondary btn-block">View Appointments</div>
+        </a>
+
+        <!-- Profile Card -->
+        <a href="{% url 'patient_profile' %}" class="card card-interactive text-center text-decoration-none"
+            style="display: block; color: inherit;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👤</div>
+            <h3 style="margin-bottom: 0.5rem;">My Profile</h3>
+            <p class="text-muted mb-2">Update your personal information.</p>
+            <div class="btn btn-secondary btn-block">Edit Profile</div>
+        </a>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
