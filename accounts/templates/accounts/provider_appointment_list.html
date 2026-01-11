@@ -1,95 +1,102 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Appointments</title>
-</head>
-<body style="margin: 0;padding:0;">
+{% extends 'accounts/base.html' %}
 
+{% block title %}My Appointments - Clinic Appointment{% endblock %}
+
+{% block content %}
 {% include "accounts/provider_header.html" %}
 
-{% if request.GET.clash %}
-<script>
-alert("❌ Cannot approve this appointment. Time slot clashes.");
-</script>
-{% endif %}
+<div class="container">
+    {% if request.GET.clash %}
+    <div class="alert alert-error">❌ Cannot approve this appointment. Time slot clashes.</div>
+    {% endif %}
 
-{% if request.GET.approved %}
-<script>
-alert("✔ Appointment approved successfully!");
-</script>
-{% endif %}
+    {% if request.GET.approved %}
+    <div class="alert alert-success">✔ Appointment approved successfully!</div>
+    {% endif %}
 
-<div style="padding:25px; font-family:Arial;">
+    <div class="mb-3 mt-3">
+        <h2>⏱ Upcoming Appointments</h2>
+    </div>
 
-<h2>Upcoming Appointments</h2>
+    <div class="card table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in upcoming %}
+                <tr>
+                    <td>
+                        <strong>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</strong>
+                    </td>
+                    <td>{{ appt.date }}</td>
+                    <td>{{ appt.start_time }} → {{ appt.end_time }}</td>
+                    <td>{{ appt.reason }}</td>
+                    <td><span class="badge badge-{{ appt.status|lower }}">{{ appt.status }}</span></td>
+                    <td>
+                        {% if appt.status == "pending" %}
+                        <a href="{% url 'approve_appointment' appt.id %}" class="btn btn-primary"
+                            style="padding: 5px 10px; font-size: 0.8rem;">Approve</a>
+                        <a href="{% url 'reject_appointment' appt.id %}" class="btn btn-danger"
+                            style="padding: 5px 10px; font-size: 0.8rem; margin-left: 5px;">Reject</a>
 
-{% if upcoming %}
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Patient Name</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Reason</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+                        {% elif appt.status == "reschedule_requested" %}
+                        <a href="{% url 'approve_appointment' appt.id %}" class="btn btn-primary"
+                            style="padding: 5px 10px; font-size: 0.8rem;">Approve Reschedule</a>
+                        <a href="{% url 'reject_appointment' appt.id %}" class="btn btn-danger"
+                            style="padding: 5px 10px; font-size: 0.8rem; margin-left: 5px;">Reject</a>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No upcoming appointments.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    {% for appt in upcoming %}
-    <tr>
-        <td>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</td>
-        <td>{{ appt.date }}</td>
-        <td>{{ appt.start_time }} → {{ appt.end_time }}</td>
-        <td>{{ appt.reason }}</td>
-        <td>{{ appt.status }}</td>
+    <div class="mb-3 mt-4">
+        <h2>✅ Completed Appointments</h2>
+    </div>
 
-        <td>
-            {% if appt.status == "pending" %}
-                <a href="{% url 'approve_appointment' appt.id %}">Approve</a> |
-                <a href="{% url 'reject_appointment' appt.id %}">Reject</a>
-            
-            {% elif appt.status == "reschedule_requested" %}
-                <a href="{% url 'approve_appointment' appt.id %}">Approve Reschedule</a> |
-                <a href="{% url 'reject_appointment' appt.id %}">Reject</a>
-            {% else %}
-                -
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>No upcoming appointments.</p>
-{% endif %}
-
-<br><br>
-
-<h2>Completed Appointments</h2>
-
-{% if completed %}
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Patient Name</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Reason</th>
-        <th>Status</th>
-    </tr>
-
-    {% for appt in completed %}
-    <tr>
-        <td>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</td>
-        <td>{{ appt.date }}</td>
-        <td>{{ appt.start_time }} → {{ appt.end_time }}</td>
-        <td>{{ appt.reason }}</td>
-        <td>{{ appt.status }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<p>No completed appointments.</p>
-{% endif %}
-
+    <div class="card table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in completed %}
+                <tr>
+                    <td>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>{{ appt.start_time }} → {{ appt.end_time }}</td>
+                    <td>{{ appt.reason }}</td>
+                    <td><span class="badge badge-{{ appt.status|lower }}">{{ appt.status }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No completed appointments.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
