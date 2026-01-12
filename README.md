@@ -14,3 +14,5 @@ Initial commit check
 - [x] /provider/calendar/day/2026/1/1/
 - [x] /provider/profile/
 - [x] /provider/change-password/
+- [x] /patient/change-password/
+- [x] /patient/profile/
